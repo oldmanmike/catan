@@ -18,22 +18,19 @@ library
     hs-source-dirs:     src
     exposed-modules:    Catan
                         Catan.Logic
-                        Catan.SDL
-                        Catan.SDL.Basic
-                        Catan.SDL.Enum
     build-depends:      base >= 4.7 && < 5,
                         containers,
                         random,
-                        sdl2,
-                        transformers
+                        vector
     default-language:   Haskell2010
 
 executable catan
     hs-source-dirs:     game
     main-is:            Main.hs
-    ghc-options:        -O2 -threaded -rtsopts -with-rtsopts=-N -fllvm -fforce-recomp
+    ghc-options:        -O2 -threaded -rtsopts -with-rtsopts=-N -fllvm -fforce-recomp -fprof-auto
     build-depends:      base,
                         catan,
+                        criterion,
                         random,
                         random-shuffle
     default-language:   Haskell2010
@@ -45,6 +42,21 @@ test-suite catan-test
     build-depends:      base,
                         catan
     ghc-options:        -threaded -rtsopts -with-rtsopts=-N
+    default-language:   Haskell2010
+
+benchmark catan-bench
+    type:               exitcode-stdio-1.0
+    hs-source-dirs:     src, bench
+    other-modules:      Catan
+                        Catan.Logic
+    main-is:            BenchmarkSuite.hs
+    build-depends:      base,
+                        containers,
+                        criterion,
+                        random,
+                        random-shuffle
+    ghc-options:        -Wall
+                        -O2
     default-language:   Haskell2010
 
 source-repository head

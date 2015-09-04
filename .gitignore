@@ -1,4 +1,5 @@
 .stack-work/
+assets/
 dist
 cabal-dev
 *.o
@@ -11,6 +12,7 @@ cabal-dev
 .hpc
 .hsenv
 .cabal-sandbox/
+catan.html
 cabal.sandbox.config
 *.prof
 *.aux

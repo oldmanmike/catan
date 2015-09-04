@@ -8,9 +8,7 @@
 --
 -------------------------------------------------------------------------------
 module Catan (
-    module Catan.Logic,
-    module Catan.SDL
+    module Catan.Logic
 ) where
 
 import Catan.Logic
-import Catan.SDL
