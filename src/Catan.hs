@@ -7,8 +7,8 @@
 -- Portability      : portable
 --
 -------------------------------------------------------------------------------
-module Catan (
-    module Catan.Logic
+module Catan
+( module Catan.Logic
 ) where
 
 import Catan.Logic
