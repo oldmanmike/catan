@@ -35,8 +35,10 @@ executable catan
     build-depends:      base,
                         catan,
                         criterion,
+                        linear,
                         random,
-                        random-shuffle
+                        random-shuffle,
+                        sdl2
     default-language:   Haskell2010
 
 test-suite catan-test
