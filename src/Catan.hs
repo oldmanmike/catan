@@ -8,7 +8,11 @@
 --
 -------------------------------------------------------------------------------
 module Catan
-( module Catan.Logic
+( module Catan.Common
+, module Catan.Logic
+, module Catan.Settlement
 ) where
 
+import Catan.Common
 import Catan.Logic
+import Catan.Settlement

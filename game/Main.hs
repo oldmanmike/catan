@@ -5,6 +5,7 @@ import Catan
 import Control.Monad
 import Data.Char
 import Data.List
+import qualified Data.Vector as V
 import Linear (V4(..))
 import SDL
 import System.IO
@@ -61,6 +62,6 @@ initBoard = do
               tlst = (7:) $ shuffle' tokenList 18 gen2
               blst = (Desert:) $ shuffle' biomeList 18 gen3
               rlst = True : (replicate 18 False)
-  return $ Board map [] []
+  return $ Board map V.empty []
 
 

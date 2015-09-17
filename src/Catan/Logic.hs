@@ -10,11 +10,11 @@
 module Catan.Logic
 ( Biome(..)
 , Board(..)
-, Color(..)
+, Edge
 , Hex(..)
 , Player(..)
 , ResourcePool(..)
-, Settlement(..)
+, Road
 , coordList
 , tokenList
 , colorList
@@ -28,12 +28,13 @@ module Catan.Logic
 , groupBySnd
 , zip2Hex
 , biomeToResource
-, settlementToHex
-, produceResources
 ) where
 
 import Data.List
 import System.Random
+
+import Catan.Common
+import Catan.Settlement
 
 -------------------------------------------------------------------------------
 -- Core Data Structures
@@ -53,7 +54,7 @@ data Player = Player
 
 data Board = Board
   { hexs        :: [Hex]
-  , settlements :: [Settlement]
+  , settlements :: Settlements
   , roads       :: [Road]
   } deriving (Show,Eq,Read)
 
@@ -68,14 +69,6 @@ data ResourcePool = ResourcePool
   , lumber     :: Int
   , ore        :: Int
   , wool       :: Int
-  } deriving (Show,Eq,Read)
-
-
-data Settlement = Settlement
-  { vertex        :: (Coord,Coord,Coord)
-  , adjacentHexs  :: [Hex]
-  , faction       :: Color
-  , city          :: Bool
   } deriving (Show,Eq,Read)
 
 
@@ -100,13 +93,6 @@ data DevCard = Soldier | VictoryPoints | Monopoly | RoadBuilding | YearOfPlenty
   deriving (Show,Eq,Read)
 
 
-data Color = Blue | Red | Orange | White
-  deriving (Show,Eq,Read,Ord)
-
-
-type Coord = (Int,Int)
-
-
 data Biome = Desert
            | Fields
            | Forest
@@ -116,10 +102,7 @@ data Biome = Desert
            deriving (Show,Eq,Read,Ord)
 
 
-type Road = (Coord,Coord)
-
-
-type Token = Int
+type Road = (Color,Edge)
 
 
 -------------------------------------------------------------------------------
@@ -180,38 +163,6 @@ testMap = [ (Hex ( 0,-2) 6 Forest False)
           , (Hex ( 0, 2) 8 Pasture False)]
 
 
-testSettlements :: [Settlement]
-testSettlements = [ (Settlement
-                      ((0,-2),(1,-2),(0,-1))
-                      [ (Hex ( 0,-2) 6 Forest False)
-                      , (Hex ( 1,-2) 5 Fields False)
-                      , (Hex ( 0,-1) 3 Pasture False)]
-                      Blue
-                      False)
-                  , (Settlement
-                      ((1,-2),(0,-1),(1,-1))
-                      [ (Hex (1,-2) 5 Fields False)
-                      , (Hex (0,-1) 3 Pasture False)
-                      , (Hex (1,-1) 8 Hills False)]
-                      Blue
-                      False)
-                  , (Settlement
-                      ((1,-2),(1,-1),(2,-2))
-                      [ (Hex (1,-2) 5 Fields False)
-                      , (Hex (1,-1) 8 Hills False)
-                      , (Hex (2,-2) 9 Mountains False)]
-                      Blue
-                      False)
-                  , (Settlement
-                      ((-1,2),(0,2),(0,1))
-                      [ (Hex (-1,2) 4 Forest False)
-                      , (Hex (0,2) 8 Pasture False)
-                      , (Hex (0,1) 10 Fields False)]
-                      Red
-                      False)
-                  ]
-
-
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
@@ -250,7 +201,7 @@ biomeToResource Mountains = Ore
 biomeToResource Pasture   = Wool
 biomeToResource Desert    = undefined
 
-
+{-
 settlementToHex :: [Settlement] -> [(Color,[Hex])]
 settlementToHex [] = []
 settlementToHex (x:xs) = do
@@ -267,4 +218,4 @@ produceResources settlementList = do
     let earnings = map.map
     return $ joinedGroupedHexs
   where f = map (map (\x -> (token x,biome x)).concat.(map snd))
-
+-}
