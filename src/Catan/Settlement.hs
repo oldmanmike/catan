@@ -2,6 +2,7 @@ module Catan.Settlement
 ( Settlement(..)
 , Settlements
 , buildSettlement
+, upgradeToCity
 , testSettlements
 ) where
 
@@ -10,18 +11,23 @@ import qualified Data.Vector as V
 import Catan.Common
 
 data Settlement = Settlement
-  { coords  :: Vertex
-  , owner   :: Color
-  , city    :: Bool
+  { getVert   :: Vertex
+  , owner     :: Color
+  , city      :: Bool
   } deriving (Eq,Ord,Read,Show)
 
 type Settlements = V.Vector Settlement
 
-buildSettlement :: Settlements
-                -> Color
-                -> Vertex
-                -> Settlements
+buildSettlement :: Settlements -> Color -> Vertex -> Settlements
 buildSettlement s c v = V.cons (Settlement v c False) s
+
+upgradeToCity :: Settlements -> Vertex -> Color -> Either String Settlements
+upgradeToCity s vert clr = do
+  let x = Settlement vert clr False
+  if V.elem x s
+    then Right (V.cons (Settlement vert clr True)
+                       (V.filter (\i -> (getVert i) /= vert) s))
+    else Left "Error: Settlement does not exist!"
 
 testSettlements :: Settlements
 testSettlements = V.fromList [ (Settlement
