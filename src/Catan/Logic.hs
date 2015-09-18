@@ -1,39 +1,35 @@
 -------------------------------------------------------------------------------
 -- |
--- Copyright        : (c) 2015 Michael Carpenter
--- License          : GPL3
--- Maintainer       : Michael Carpenter <oldmanmike.dev@gmail.com>
--- Stability        : provisional
--- Portability      : portable
+-- Copyright    : (C) 2015 Michael Carpenter
+-- License      : GPL3
+-- Maintainer   : Michael Carpenter <oldmanmike.dev@gmail.com>
+-- Stability    : experimental
+-- Portability  : GHC
 --
 -------------------------------------------------------------------------------
 module Catan.Logic
 ( Biome(..)
 , Board(..)
-, Edge
 , Hex(..)
 , Player(..)
-, ResourcePool(..)
 , Road
 , coordList
 , tokenList
 , colorList
 , biomeList
 , testMap
-, testSettlements
 , devCardList
 , rollDice
 , isToken
 , groupByFst
 , groupBySnd
 , zip2Hex
-, biomeToResource
 ) where
 
-import Data.List
 import System.Random
 
 import Catan.Common
+import Catan.Resource
 import Catan.Settlement
 
 -------------------------------------------------------------------------------
@@ -46,7 +42,7 @@ data Player = Player
   , name            :: String -- ^ Player nick used ingame
   , color           :: Color -- ^ Player's color
   , hand            :: [DevCard] -- ^ Development cards player has in hand
-  , coffers         :: ResourcePool -- ^ Resource cards player has in hand
+  , coffers         :: Resources -- ^ Resource cards player has in hand
   , activeCards     :: [DevCard] -- ^ Development cards that are in-play
   , victoryPoints   :: Int -- ^ Player's calculated victory points
   } deriving (Show,Eq,Read)
@@ -63,43 +59,13 @@ data Board = Board
 type DevDeck = [DevCard]
 
 
-data ResourcePool = ResourcePool
-  { bricks     :: Int
-  , grain      :: Int
-  , lumber     :: Int
-  , ore        :: Int
-  , wool       :: Int
-  } deriving (Show,Eq,Read)
-
-
-data Hex = Hex
-  { coord     :: Coord
-  , token     :: Token
-  , biome     :: Biome
-  , robber    :: Bool
-  } deriving (Show,Eq,Ord,Read)
-
-
 -------------------------------------------------------------------------------
 -- Types
 -------------------------------------------------------------------------------
 
 
-data ResourceCard = Brick | Grain | Lumber | Ore | Wool
-  deriving (Show,Read,Eq)
-
-
 data DevCard = Soldier | VictoryPoints | Monopoly | RoadBuilding | YearOfPlenty
   deriving (Show,Eq,Read)
-
-
-data Biome = Desert
-           | Fields
-           | Forest
-           | Hills
-           | Mountains
-           | Pasture
-           deriving (Show,Eq,Read,Ord)
 
 
 type Road = (Color,Edge)
@@ -193,13 +159,6 @@ zip2Hex _ _ _ [] = []
 zip2Hex (c:cs) (t:ts) (b:bs) (r:rs) = (Hex c t b r):(zip2Hex cs ts bs rs)
 
 
-biomeToResource :: Biome -> ResourceCard
-biomeToResource Fields    = Grain
-biomeToResource Forest    = Lumber
-biomeToResource Hills     = Brick
-biomeToResource Mountains = Ore
-biomeToResource Pasture   = Wool
-biomeToResource Desert    = undefined
 
 {-
 settlementToHex :: [Settlement] -> [(Color,[Hex])]

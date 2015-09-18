@@ -1,34 +1,52 @@
+-------------------------------------------------------------------------------
+-- |
+-- Copyright    : (C) 2015 Michael Carpenter
+-- License      : GPL3
+-- Maintainer   : Michael Carpenter <oldmanmike.dev@gmail.com>
+-- Stability    : experimental
+-- Portability  : GHC
+--
+-------------------------------------------------------------------------------
 module Catan.Settlement
 ( Settlement(..)
 , Settlements
-, buildSettlement
+, build
 , upgradeToCity
-, testSettlements
+--, testSettlements
 ) where
 
 import qualified Data.Vector as V
 
 import Catan.Common
+import Catan.Resource
+
 
 data Settlement = Settlement
-  { getVert   :: Vertex
-  , owner     :: Color
-  , city      :: Bool
+  { getVert           :: Vertex
+  , localResources    :: [(Token,Resource)]
+  , owner             :: Color
+  , city              :: Bool
   } deriving (Eq,Ord,Read,Show)
+
 
 type Settlements = V.Vector Settlement
 
-buildSettlement :: Settlements -> Color -> Vertex -> Settlements
-buildSettlement s c v = V.cons (Settlement v c False) s
 
-upgradeToCity :: Settlements -> Vertex -> Color -> Either String Settlements
-upgradeToCity s vert clr = do
-  let x = Settlement vert clr False
-  if V.elem x s
-    then Right (V.cons (Settlement vert clr True)
-                       (V.filter (\i -> (getVert i) /= vert) s))
+build :: [Hex] -> Settlements -> Color -> Vertex -> Either String Settlements
+build hexs s color vert = if V.notElem (Settlement vert adjResources color False) s
+                            then Right $ V.cons (Settlement vert adjResources color False) s
+                            else Left "Error: Settlement already exists!"
+  where adjResources = map (\x -> ((token x),(biomeToResource $ biome x))) $ getAdjacentHexs vert hexs
+
+
+upgradeToCity :: Settlements -> Settlement -> Either String Settlements
+upgradeToCity slst s = do
+  if V.elem s slst
+    then Right (V.cons (s {city = True})
+                       (V.filter (\i -> (getVert i) /= (getVert s)) slst))
     else Left "Error: Settlement does not exist!"
 
+{-
 testSettlements :: Settlements
 testSettlements = V.fromList [ (Settlement
                       ((0,-2),(1,-2),(0,-1))
@@ -67,4 +85,4 @@ testSettlements = V.fromList [ (Settlement
                       Red
                       False)
                   ]
-
+-}
