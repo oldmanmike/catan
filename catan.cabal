@@ -24,7 +24,6 @@ library
     build-depends:      base >= 4.7 && < 5,
                         containers,
                         mtl,
-                        lens,
                         linear,
                         random,
                         sdl2,
@@ -37,7 +36,6 @@ executable catan
     ghc-options:        -O2 -threaded -rtsopts -with-rtsopts=-N -fllvm -fforce-recomp -fprof-auto
     build-depends:      base,
                         catan,
-                        criterion,
                         linear,
                         random,
                         random-shuffle,
