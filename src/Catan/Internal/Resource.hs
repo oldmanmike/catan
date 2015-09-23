@@ -7,26 +7,9 @@
 -- Portability  : GHC
 --
 -------------------------------------------------------------------------------
-module Catan.Resource
-( Resource(..)
-, Resources(..)
-, biomeToResource
-) where
+module Catan.Internal.Resource (biomeToResource) where
 
-import Catan.Common
-
-data Resource = Brick | Grain | Lumber | Ore | Wool
-  deriving (Show,Read,Eq,Ord)
-
-
-data Resources = Resources
-  { bricks     :: Int
-  , grain      :: Int
-  , lumber     :: Int
-  , ore        :: Int
-  , wool       :: Int
-  } deriving (Show,Eq,Read,Ord)
-
+import Catan.Types
 
 biomeToResource :: Biome -> Resource
 biomeToResource Fields    = Grain
@@ -34,5 +17,4 @@ biomeToResource Forest    = Lumber
 biomeToResource Hills     = Brick
 biomeToResource Mountains = Ore
 biomeToResource Pasture   = Wool
-biomeToResource Desert    = undefined
-
+biomeToResource Desert    = NoResource

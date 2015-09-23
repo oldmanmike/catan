@@ -7,43 +7,18 @@
 -- Portability  : GHC
 --
 -------------------------------------------------------------------------------
-module Catan.Settlement
-( Settlement(..)
-, Settlements
-, build
-, upgradeToCity
+module Catan.Internal.Settlement
+( upgradeToCity
 --, testSettlements
 ) where
 
-import qualified Data.Vector as V
+import Catan.Internal.Resource
+import Catan.Types
 
-import Catan.Common
-import Catan.Resource
-
-
-data Settlement = Settlement
-  { getVert           :: Vertex
-  , localResources    :: [(Token,Resource)]
-  , owner             :: Color
-  , city              :: Bool
-  } deriving (Eq,Ord,Read,Show)
-
-
-type Settlements = V.Vector Settlement
-
-
-build :: [Hex] -> Settlements -> Color -> Vertex -> Either String Settlements
-build hexs s color vert = if V.notElem (Settlement vert adjResources color False) s
-                            then Right $ V.cons (Settlement vert adjResources color False) s
-                            else Left "Error: Settlement already exists!"
-  where adjResources = map (\x -> ((token x),(biomeToResource $ biome x))) $ getAdjacentHexs vert hexs
-
-
-upgradeToCity :: Settlements -> Settlement -> Either String Settlements
+upgradeToCity :: [Settlement] -> Settlement -> Either String [Settlement]
 upgradeToCity slst s = do
-  if V.elem s slst
-    then Right (V.cons (s {city = True})
-                       (V.filter (\i -> (getVert i) /= (getVert s)) slst))
+  if elem s slst
+    then Right ((s {city = True}):(filter (\i -> (getVert i) /= (getVert s)) slst))
     else Left "Error: Settlement does not exist!"
 
 {-

@@ -17,10 +17,16 @@ cabal-version:          >=1.10
 library
     hs-source-dirs:     src
     exposed-modules:    Catan
-                        Catan.Common
-                        Catan.Logic
-                        Catan.Resource
-                        Catan.Settlement
+                        Catan.Build
+                        Catan.Draw
+                        Catan.Internal
+                        Catan.Internal.Board
+                        Catan.Internal.Logic
+                        Catan.Internal.Resource
+                        Catan.Internal.Settlement
+                        Catan.MoveRobber
+                        Catan.Trade
+                        Catan.Types
     build-depends:      base >= 4.7 && < 5,
                         containers,
                         mtl,
@@ -59,7 +65,7 @@ benchmark catan-bench
     type:               exitcode-stdio-1.0
     hs-source-dirs:     src, bench
     other-modules:      Catan
-                        Catan.Logic
+                        Catan.Internal.Logic
     main-is:            BenchmarkSuite.hs
     build-depends:      base,
                         containers,
