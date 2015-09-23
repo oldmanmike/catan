@@ -7,13 +7,8 @@
 -- Portability  : GHC
 --
 -------------------------------------------------------------------------------
-module Catan.Logic
-( Biome(..)
-, Board(..)
-, Hex(..)
-, Player(..)
-, Road
-, coordList
+module Catan.Internal.Logic
+( coordList
 , tokenList
 , colorList
 , biomeList
@@ -28,47 +23,9 @@ module Catan.Logic
 
 import System.Random
 
-import Catan.Common
-import Catan.Resource
-import Catan.Settlement
-
--------------------------------------------------------------------------------
--- Core Data Structures
--------------------------------------------------------------------------------
-
-
-data Player = Player
-  { turnOrder       :: Int -- ^ When this players turn occurs relative to other players
-  , name            :: String -- ^ Player nick used ingame
-  , color           :: Color -- ^ Player's color
-  , hand            :: [DevCard] -- ^ Development cards player has in hand
-  , coffers         :: Resources -- ^ Resource cards player has in hand
-  , activeCards     :: [DevCard] -- ^ Development cards that are in-play
-  , victoryPoints   :: Int -- ^ Player's calculated victory points
-  } deriving (Show,Eq,Read)
-
-
-data Board = Board
-  { hexs        :: [Hex]
-  , settlements :: Settlements
-  , roads       :: [Road]
-  } deriving (Show,Eq,Read)
-
-
--- | The deck of development cards can be acurately represented by a linked list.
-type DevDeck = [DevCard]
-
-
--------------------------------------------------------------------------------
--- Types
--------------------------------------------------------------------------------
-
-
-data DevCard = Soldier | VictoryPoints | Monopoly | RoadBuilding | YearOfPlenty
-  deriving (Show,Eq,Read)
-
-
-type Road = (Color,Edge)
+import Catan.Internal.Resource
+import Catan.Internal.Settlement
+import Catan.Types
 
 
 -------------------------------------------------------------------------------
@@ -157,24 +114,3 @@ zip2Hex _ [] _ _ = []
 zip2Hex _ _ [] _ = []
 zip2Hex _ _ _ [] = []
 zip2Hex (c:cs) (t:ts) (b:bs) (r:rs) = (Hex c t b r):(zip2Hex cs ts bs rs)
-
-
-
-{-
-settlementToHex :: [Settlement] -> [(Color,[Hex])]
-settlementToHex [] = []
-settlementToHex (x:xs) = do
-  if city x
-    then (faction x,adjacentHexs x):((faction x,adjacentHexs x):settlementToHex xs)
-    else (faction x,adjacentHexs x):(settlementToHex xs)
-
-
---produceResources :: [Settlement] -> [[
-produceResources settlementList = do
-    let colorAndHex = settlementToHex settlementList
-    let groupedByColor = groupBy groupByFst colorAndHex
-    let joinedGroupedHexs = f groupedByColor
-    let earnings = map.map
-    return $ joinedGroupedHexs
-  where f = map (map (\x -> (token x,biome x)).concat.(map snd))
--}

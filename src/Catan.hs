@@ -8,13 +8,16 @@
 --
 -------------------------------------------------------------------------------
 module Catan
-( module Catan.Common
-, module Catan.Logic
-, module Catan.Resource
-, module Catan.Settlement
+( module Catan.Build
+, module Catan.Draw
+, module Catan.Internal
+, module Catan.MoveRobber
+, module Catan.Types
 ) where
 
-import Catan.Common
-import Catan.Logic
-import Catan.Resource
-import Catan.Settlement
+import Catan.Build
+import Catan.Draw
+import Catan.Internal
+import Catan.MoveRobber
+import Catan.Trade
+import Catan.Types
