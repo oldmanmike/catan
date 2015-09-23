@@ -69,10 +69,8 @@ benchmark catan-bench
     main-is:            BenchmarkSuite.hs
     build-depends:      base,
                         containers,
-                        criterion,
                         random,
-                        random-shuffle,
-                        statistics
+                        random-shuffle
     ghc-options:        -Wall
                         -O2
     default-language:   Haskell2010
