@@ -10,7 +10,8 @@
 module Catan.Types
 ( Biome (..)
 , Board (..)
-, CatanState (..)
+, Catan (..)
+, CatanInstance (..)
 , Color (..)
 , Coord
 , DevCard (..)
@@ -18,6 +19,7 @@ module Catan.Types
 , Edge
 , Hex(..)
 , Player (..)
+, Port
 , Resource (..)
 , Resources (..)
 , Road
@@ -25,6 +27,8 @@ module Catan.Types
 , Token
 , Vertex
 ) where
+
+import Control.Monad.State
 
 data Biome = Desert
            | Fields
@@ -42,7 +46,10 @@ data Board = Board
   } deriving (Show,Eq,Read)
 
 
-data CatanState = CatanState
+newtype Catan s a = C (State CatanInstance a)
+
+
+data CatanInstance = CatanInstance
   { players       :: [Player]
   , resourceBank  :: Resources
   , deck          :: DevDeck
@@ -86,6 +93,8 @@ data Player = Player
   , victoryPoints   :: Int -- ^ Player's calculated victory points
   } deriving (Show,Eq,Read)
 
+
+type Port = Vertex
 
 data Resource = Brick | Grain | Lumber | Ore | Wool | NoResource
   deriving (Show,Read,Eq,Ord)

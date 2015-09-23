@@ -14,6 +14,8 @@ module Catan.Trade
 
 import Catan.Types
 
-tradeDomestic = undefined
+tradeDomestic :: Player -> Resources -> Player -> Resources -> Player
+tradeDomestic player request trader response = undefined
 
-tradeMaritime = undefined
+tradeMaritime :: Player -> Port -> Player
+tradeMaritime player port = undefined

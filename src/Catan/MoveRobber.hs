@@ -11,4 +11,5 @@ module Catan.MoveRobber (moveRobber) where
 
 import Catan.Types
 
+moveRobber :: Board -> Hex -> Board
 moveRobber = undefined

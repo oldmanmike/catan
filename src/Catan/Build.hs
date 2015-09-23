@@ -11,14 +11,14 @@ module Catan.Build
 ( buildRoad
 , buildSettlement
 , buildCity
-, buyDevelopmentCard
 ) where
 
 import Catan.Types
 import Catan.Internal.Resource
 import Catan.Internal.Board
 
-buildRoad = undefined
+buildRoad :: Board -> Player -> Either String (Board,Player)
+buildRoad b p = undefined
 
 buildSettlement :: [Hex] -> [Settlement] -> Color -> Vertex -> Either String [Settlement]
 buildSettlement hexs s color vert = if notElem (Settlement vert adjResources color False) s
@@ -27,6 +27,5 @@ buildSettlement hexs s color vert = if notElem (Settlement vert adjResources col
   where adjResources = map (\x -> ((token x),(biomeToResource $ biome x))) $ getAdjacentHexs vert hexs
 
 
-buildCity = undefined
-
-buyDevelopmentCard = undefined
+buildCity :: Board -> Player -> Vertex -> Either String (Board,Player)
+buildCity b p v = undefined

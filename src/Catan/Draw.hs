@@ -7,9 +7,9 @@
 -- Portability  : GHC
 --
 -------------------------------------------------------------------------------
-module Catan.Draw (draw) where
+module Catan.Draw (buyDevCard) where
 
 import Catan.Types
 
-draw:: [DevCard] -> (DevCard,[DevCard])
-draw (x:xs) = (x,xs)
+buyDevCard :: DevDeck -> Player -> Either String (DevDeck,Player,DevCard)
+buyDevCard d p = undefined
