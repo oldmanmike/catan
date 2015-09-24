@@ -44,6 +44,7 @@ executable catan
     build-depends:      base,
                         catan,
                         linear,
+                        QuickCheck,
                         random,
                         random-shuffle,
                         sdl2,
@@ -68,6 +69,9 @@ benchmark catan-bench
     build-depends:      base,
                         catan,
                         containers,
+                        criterion,
+                        mtl,
+                        QuickCheck,
                         random,
                         random-shuffle
     ghc-options:        -Wall

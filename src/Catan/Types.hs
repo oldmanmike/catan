@@ -93,6 +93,7 @@ data Hex = Hex
   , robber    :: Bool
   } deriving (Show,Eq,Ord,Read)
 
+
 instance Arbitrary Hex where
   arbitrary = do
     let c = (liftM2 (,) (choose (-2,2) :: Gen Int) (choose (-2,2) :: Gen Int)) :: Gen Coord
