@@ -28,7 +28,9 @@ module Catan.Types
 , Vertex
 ) where
 
+import Control.Monad
 import Control.Monad.State
+import Test.QuickCheck
 
 data Biome = Desert
            | Fields
@@ -38,6 +40,15 @@ data Biome = Desert
            | Pasture
            deriving (Show,Eq,Read,Ord)
 
+instance Arbitrary Biome where
+  arbitrary = do
+    n <- choose (0,4) :: Gen Int
+    return $ case n of
+      0 -> Fields
+      1 -> Forest
+      2 -> Hills
+      3 -> Mountains
+      4 -> Pasture
 
 data Board = Board
   { hexs        :: [Hex]
@@ -82,6 +93,13 @@ data Hex = Hex
   , robber    :: Bool
   } deriving (Show,Eq,Ord,Read)
 
+instance Arbitrary Hex where
+  arbitrary = do
+    let c = (liftM2 (,) (choose (-2,2) :: Gen Int) (choose (-2,2) :: Gen Int)) :: Gen Coord
+    let t = choose (1,11) :: Gen Token
+    let b = arbitrary :: Gen Biome
+    let r = arbitrary :: Gen Bool
+    liftM4 (Hex) c t b r
 
 data Player = Player
   { turnOrder       :: Int -- ^ When this players turn occurs relative to other players

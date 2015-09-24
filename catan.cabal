@@ -31,6 +31,7 @@ library
                         containers,
                         mtl,
                         linear,
+                        QuickCheck,
                         random,
                         sdl2,
                         vector
@@ -63,10 +64,9 @@ test-suite catan-test
 benchmark catan-bench
     type:               exitcode-stdio-1.0
     hs-source-dirs:     src, bench
-    other-modules:      Catan
-                        Catan.Internal.Logic
     main-is:            BenchmarkSuite.hs
     build-depends:      base,
+                        catan,
                         containers,
                         random,
                         random-shuffle

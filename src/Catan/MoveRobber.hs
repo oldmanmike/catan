@@ -1,3 +1,4 @@
+{-# LANGUAGE PartialTypeSignatures #-}
 -------------------------------------------------------------------------------
 -- |
 -- Copyright    : (C) 2015 Michael Carpenter
@@ -9,7 +10,22 @@
 -------------------------------------------------------------------------------
 module Catan.MoveRobber (moveRobber) where
 
+import Data.List
 import Catan.Types
 
-moveRobber :: Board -> Hex -> Board
-moveRobber = undefined
+moveRobber :: [Hex] -> Hex -> [Hex]
+moveRobber [] targetHex = []
+moveRobber h targetHex = sort $ (newRobberHex:(nowSafeHex:otherHexs))
+  where oldRobberHex  = head $ filter robber h
+        newRobberHex  = Hex (coord targetHex)
+                            (token targetHex)
+                            (biome targetHex)
+                            (True)
+        nowSafeHex    = Hex (coord oldRobberHex)
+                            (token oldRobberHex)
+                            (biome oldRobberHex)
+                            (False)
+        otherHexs = filter (\x -> (x/=targetHex)&&(x/=oldRobberHex)) h
+
+
+
